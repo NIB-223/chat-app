@@ -1,6 +1,43 @@
 import React from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import { View, Platform, KeyboardAvoidingView } from 'react-native';
+import {
+    View,
+    Platform,
+    KeyboardAvoidingView,
+} from 'react-native';
+
+// This import loads the firebase namespace.
+import firebase from 'firebase/compat/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+
+
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDHernoUFx9iw02yxukpSuBQQeULr3Xqjs",
+    authDomain: "chat-app-71127.firebaseapp.com",
+    projectId: "chat-app-71127",
+    storageBucket: "chat-app-71127.appspot.com",
+    messagingSenderId: "298365903023",
+    appId: "1:298365903023:web:7a616462527a8310edb45a"
+};
+
+//init db connection
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig)
+}
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
 
 export default class Chat extends React.Component {
     constructor() {
@@ -10,6 +47,9 @@ export default class Chat extends React.Component {
         }
     }
     componentDidMount() {
+        //
+        this.referenceChatMessages = firebase.firestore().collection("messages");
+        this.unsubscribe = this.referenceChatMessages.onSnapshot(this.onCollectionUpdate)
         //put  username in navigation bar (passes prop from start)
         const name = this.props.route.params.name;
 
@@ -22,6 +62,8 @@ export default class Chat extends React.Component {
             },
             headerTintColor: "#212224",
         });
+
+
         //contains system message welcoming user to chat
         this.setState({
             messages: [
@@ -44,6 +86,27 @@ export default class Chat extends React.Component {
             ]
         })
     }
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
+
+
+    onCollectionUpdate = (querySnapshot) => {
+        const messages = [];
+        // go through each document
+        querySnapshot.forEach((doc) => {
+            // get the QueryDocumentSnapshot's data
+            let data = doc.data();
+            messages.push({
+                _id: data._id,
+                text: data.text,
+                createdAt: data.createdAt.toDate(),
+                user: data.user,
+            });
+        });
+    }
+
     //allows messages to be sent/submitted
     onSend(messages = []) {
         this.setState(previousState => ({
