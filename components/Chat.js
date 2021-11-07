@@ -47,9 +47,7 @@ export default class Chat extends React.Component {
         }
     }
     componentDidMount() {
-        //
-        this.referenceChatMessages = firebase.firestore().collection("messages");
-        this.unsubscribe = this.referenceChatMessages.onSnapshot(this.onCollectionUpdate)
+
         //put  username in navigation bar (passes prop from start)
         const name = this.props.route.params.name;
 
