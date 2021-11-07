@@ -46,18 +46,30 @@ export default class Start extends React.Component {
                             <Text style={styles.colorText}>Choose Background Color:</Text>
                             <View style={styles.backgroundColorChoices}>
                                 <TouchableOpacity
+                                    accessibilityLabel="Change background color to black."
+                                    accessibilityHint="Lets you change the background in the chat room to black."
+                                    accessibilityRole="button"
                                     style={styles.circle1}
                                     onPress={() => this.setState({ background: "#090C08" })}
                                 />
                                 <TouchableOpacity
+                                    accessibilityLabel="Change background color to purple."
+                                    accessibilityHint="Lets you change the background in the chat room to dark purple."
+                                    accessibilityRole="button"
                                     style={styles.circle2}
                                     onPress={() => this.setState({ background: "#474056" })}
                                 />
                                 <TouchableOpacity
+                                    accessibilityLabel="Change background color to blue."
+                                    accessibilityHint="Lets you change the background in the chat room to dark blue."
+                                    accessibilityRole="button"
                                     style={styles.circle3}
                                     onPress={() => this.setState({ background: "#8A96A5" })}
                                 />
                                 <TouchableOpacity
+                                    accessibilityLabel="Change background color to green."
+                                    accessibilityHint="Lets you change the background in the chat room to light green."
+                                    accessibilityRole="button"
                                     style={styles.circle4}
                                     onPress={() => this.setState({ background: "#B9C6AE" })}
                                 />
@@ -66,6 +78,9 @@ export default class Start extends React.Component {
 
                         {/* takes user to chat room, pass the name and background as props*/}
                         <TouchableOpacity
+                            accessibilityLabel="Go to chatroom."
+                            accessibilityHint="Takes the user to the chatroom."
+                            accessibilityRole="button"
                             color='#FFFFFF'
                             backgroundColor='#757083'
                             style={styles.chatButton}
