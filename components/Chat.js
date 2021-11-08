@@ -4,40 +4,12 @@ import {
     View,
     Platform,
     KeyboardAvoidingView,
+    Text,
 } from 'react-native';
 
 // This import loads the firebase namespace.
-import firebase from 'firebase/compat/app';
-import 'firebase/auth';
-import 'firebase/firestore';
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-
-
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyDHernoUFx9iw02yxukpSuBQQeULr3Xqjs",
-    authDomain: "chat-app-71127.firebaseapp.com",
-    projectId: "chat-app-71127",
-    storageBucket: "chat-app-71127.appspot.com",
-    messagingSenderId: "298365903023",
-    appId: "1:298365903023:web:7a616462527a8310edb45a"
-};
-
-//init db connection
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig)
-}
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
+import firebase from "firebase";
+import "firebase/firestore";
 
 
 export default class Chat extends React.Component {
@@ -46,17 +18,30 @@ export default class Chat extends React.Component {
         this.state = {
             messages: [],
             uid: 0,
-            loggedInText: "Logging in..."
+            loggedInText: "Logging in...",
+            user: {
+                _id: "",
+                name: "",
+            },
+        };
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHernoUFx9iw02yxukpSuBQQeULr3Xqjs",
+            authDomain: "chat-app-71127.firebaseapp.com",
+            projectId: "chat-app-71127",
+            storageBucket: "chat-app-71127.appspot.com",
+            messagingSenderId: "298365903023",
+            appId: "1:298365903023:web:7a616462527a8310edb45a"
+        };
+
+        //init db connection
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            this.referenceChatMessages = firebase.firestore().collection('messages');
+            this.referenceChatMessages = null;
         }
-
-
-        // References Firebase messages
-        this.referenceChatMessages = firebase.firestore().collection('messages');
-
     }
 
     componentDidMount() {
-
         //put  username in navigation bar (passes prop from start)
         const name = this.props.route.params.name;
 
@@ -75,21 +60,23 @@ export default class Chat extends React.Component {
             if (!user) {
                 firebase.auth().signInAnonymously();
             }
-
-
+            this.referenceChatMessages = firebase.firestore().collection("messages");
             //contains system message welcoming user to chat
             this.setState({
                 uid: user.uid,
                 messages: [],
+                user: {
+                    _id: user.uid,
+                    name: name,
+                },
             });
-            this.unsubscribe = this.referenceChatMessages
-                .orderBy("createdAt", "desc")
-                .onSnapshot(this.onCollectionUpdate);
+            this.referenceChatMessages = firebase.firestore().collection("messages").where("uid, " == "", this.state.uid);
+            this.unsubscribe = this.referenceChatMessages.orderBy("createdAt", "desc").onSnapshot(this.onCollectionUpdate);
         });
     }
 
-
     componentWillUnmount() {
+        this.authUnsubscribe();
         this.unsubscribe();
     }
 
@@ -104,26 +91,38 @@ export default class Chat extends React.Component {
                 _id: data._id,
                 text: data.text,
                 createdAt: data.createdAt.toDate(),
-                user: data.user,
+                user: {
+                    _id: data.user._id,
+                    name: data.user.name,
+                },
+            });
+            this.setState({
+                nessages,
             });
         });
-    }
+    };
 
     addMessage() {
+        const message = this.state.messages[0];
+        // adds an object to the messages collection
         this.referenceChatMessages.add({
             _id: message._id,
             uid: this.state.uid,
             createdAt: message.createdAt,
-            text: message.text || '',
+            text: message.text || "",
             user: message.user,
-        })
+        });
     }
 
     //allows messages to be sent/submitted
     onSend(messages = []) {
         this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, messages),
-        }));
+        }),
+            () => {
+                this.addMessage();
+            }
+        );
     }
     //creates a bubble for the messagesa
     renderBubble(props) {
@@ -140,7 +139,6 @@ export default class Chat extends React.Component {
     }
 
     render() {
-
         return (
             <View style={{ flex: 1 }}>
                 <Text>{this.state.loggedInText}</Text>
@@ -149,11 +147,9 @@ export default class Chat extends React.Component {
                     renderBubble={this.renderBubble.bind(this)}
                     messages={this.state.messages}
                     onSend={messages => this.onSend(messages)}
-                    user={{
-                        _id: 1,
-                    }}
+                    user={this.state.user}
                 />
-                {/*Fixees android keyboard issue*/}
+                {/*Fixes android keyboard issue*/}
                 {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
             </View>
         );
