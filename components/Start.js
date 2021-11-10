@@ -10,6 +10,9 @@ import {
     TouchableOpacity,
 } from "react-native";
 
+import { Icon } from 'react-native-elements';
+
+
 
 export default class Start extends React.Component {
     constructor(props) {
@@ -24,20 +27,21 @@ export default class Start extends React.Component {
                     source={require('../assets/BackgroundImage.png')}
                     resizeMode="cover"
                 >
-                    <Text style={styles.appTitle}>{this.state.text}</Text>
+                    <Text style={styles.appTitle}>ChitChat</Text>
 
                     <View style={styles.contentBox}>
                         <View style={styles.textContainer}>
-                            <Image style={styles.icon}
-                                source={require("../assets/icon.svg")}
-                                size={14}
+                            <Icon
+                                style={styles.icon}
+                                name='person-outline'
+                                color='#757083'
+                                size={25}
                             />
-
                             {/*user enters their name, this sets the state of the name*/}
                             <TextInput style={styles.nameInput}
                                 onChangeText={(text) => this.setState({ name: text })}
                                 value={this.state.text}
-                                placeholder=' Your Name'
+                                placeholder=' Your Name...'
                             />
                         </View>
 
@@ -144,9 +148,11 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
     },
     appTitle: {
+        flex: 0.95,
+        justifyContent: 'center',
         fontSize: 45,
-        fontWeight: "600",
-        color: "#FFFFFF",
+        fontWeight: '600',
+        color: '#FFFFFF',
     },
     icon: {
         position: "absolute",
