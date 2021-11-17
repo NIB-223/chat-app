@@ -4,7 +4,7 @@ import React from "react";
 import CustomActions from './CustomActions';
 import MapView from 'react-native-maps'
 import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
-import { View, Platform, KeyboardAvoidingView, Text } from "react-native";
+import { View, Platform, KeyboardAvoidingView, Text, Image } from "react-native";
 
 // This import loads the firebase namespace.
 import firebase from "firebase";
@@ -133,6 +133,8 @@ export default class Chat extends React.Component {
             messages.push({
                 _id: data._id,
                 text: data.text,
+                location: data.location,
+                image: data.image,
                 createdAt: data.createdAt.toDate(),
                 user: {
                     _id: data.user._id,
@@ -165,6 +167,8 @@ export default class Chat extends React.Component {
             createdAt: message.createdAt,
             text: message.text || "",
             user: message.user,
+            location: message.location || "",
+            image: message.image || ""
         });
     }
 
@@ -209,6 +213,7 @@ export default class Chat extends React.Component {
         const { currentMessage } = props;
         if (currentMessage.location) {
             return (
+
                 <MapView
                     style={{
                         width: 150,
@@ -223,6 +228,13 @@ export default class Chat extends React.Component {
                         longitudeDelta: 0.0421,
                     }}
                 />
+            );
+        }
+        if (currentMessage.image) {
+            return (
+                <Image source={{
+                    uri: currentMessage.image
+                }} />
             );
         }
         return null;
