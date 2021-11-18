@@ -38,3 +38,8 @@ You must also use asyncstorage and authentication
 - AsyncStorage
 - Netingo
 - Android SDK (for testing)
+
+# How to run
+```
+npm run start
+```

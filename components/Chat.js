@@ -40,18 +40,6 @@ export default class Chat extends React.Component {
         }
     }
 
-    //function for getting messages
-    async getMessages() {
-        let messages = "";
-        try {
-            messages = (await AsyncStorage.getItem("messages")) || [];
-            this.setState({
-                messages: JSON.parse(messages),
-            });
-        } catch (error) {
-            console.log(error.message);
-        }
-    }
 
     componentDidMount() {
         //put  username in navigation bar (passes prop from start)
@@ -105,7 +93,6 @@ export default class Chat extends React.Component {
             } else {
                 this.props.navigation.setOptions({ title: `${name} is Offline` });
                 this.setState({ isConnected: false });
-                this.getMessages();
                 console.log("offline");
             }
         });
@@ -240,8 +227,7 @@ export default class Chat extends React.Component {
         return null;
     }
 
-    renderCustomActions = (props) =>
-        <CustomActions {...props} />
+    renderCustomActions = (props) => <CustomActions {...props} />
 
 
     render() {

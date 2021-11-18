@@ -6,9 +6,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import firebase from 'firebase'
 
 export default class CustomActions extends React.Component {
-    state = {
-        locatiion: null
-    }
     //getting photos from library
     pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
