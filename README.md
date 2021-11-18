@@ -28,6 +28,11 @@ Install the Expo app on your smartphone as well
 Go to Firebasse and set up the the database via Cloud Firestore
 You must also use asyncstorage and authentication
 
+## How to run
+```
+npm run start
+```
+
 # Tools/Dependencies
 - Expo
 - React
@@ -39,7 +44,3 @@ You must also use asyncstorage and authentication
 - Netingo
 - Android SDK (for testing)
 
-# How to run
-```
-npm run start
-```
