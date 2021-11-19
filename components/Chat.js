@@ -3,8 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import CustomActions from './CustomActions';
 import MapView from 'react-native-maps'
-import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
-import { View, Platform, KeyboardAvoidingView, Text, Image } from "react-native";
+import { GiftedChat, Day, Bubble, InputToolbar } from "react-native-gifted-chat";
+import { View, Platform, KeyboardAvoidingView, Text, Image, StyleSheet } from "react-native";
 
 // This import loads the firebase namespace.
 import firebase from "firebase";
@@ -49,9 +49,6 @@ export default class Chat extends React.Component {
         const background = this.props.route.params.background;
         this.props.navigation.setOptions({
             title: `Welcome ${name}`,
-            headerStyle: {
-                backgroundColor: `${background}`,
-            },
             headerTintColor: "#212224",
         });
 
@@ -229,10 +226,13 @@ export default class Chat extends React.Component {
 
     renderCustomActions = (props) => <CustomActions {...props} />
 
+    renderDay(props) {
+        return <Day {...props} textStyle={{ color: 'FFFFFF' }} />
+    }
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: `${this.props.route.params.background}` }} >
                 <Text>{this.state.loggedInText}</Text>
                 {/* bubble around messages */}
                 <GiftedChat
@@ -243,6 +243,7 @@ export default class Chat extends React.Component {
                     renderCustomView={this.renderCustomView}
                     renderActions={this.renderCustomActions}
                     renderBubble={this.renderBubble.bind(this)}
+                    renderDay={this.renderDay}
                     messages={this.state.messages}
                     onSend={(messages) => this.onSend(messages)}
                     renderInputToolbar={this.renderInputToolbar.bind(this)}

@@ -17,7 +17,7 @@ import { Icon } from 'react-native-elements';
 export default class Start extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { name: '', background: "" };
+        this.state = { name: '', background: "", border: 0, };
     }
 
     render() {
@@ -50,32 +50,32 @@ export default class Start extends React.Component {
                             <Text style={styles.colorText}>Choose Background Color:</Text>
                             <View style={styles.backgroundColorChoices}>
                                 <TouchableOpacity
-                                    accessibilityLabel="Change background color to black."
+                                    accessibilityLabel="Change background color to silver."
                                     accessibilityHint="Lets you change the background in the chat room to black."
                                     accessibilityRole="button"
                                     style={styles.circle1}
-                                    onPress={() => this.setState({ background: "#090C08" })}
+                                    onPress={() => this.setState({ background: "#EDEDED" })}
                                 />
                                 <TouchableOpacity
                                     accessibilityLabel="Change background color to purple."
                                     accessibilityHint="Lets you change the background in the chat room to dark purple."
                                     accessibilityRole="button"
                                     style={styles.circle2}
-                                    onPress={() => this.setState({ background: "#474056" })}
+                                    onPress={() => this.setState({ background: "#F4E5FF" })}
                                 />
                                 <TouchableOpacity
                                     accessibilityLabel="Change background color to blue."
                                     accessibilityHint="Lets you change the background in the chat room to dark blue."
                                     accessibilityRole="button"
                                     style={styles.circle3}
-                                    onPress={() => this.setState({ background: "#8A96A5" })}
+                                    onPress={() => this.setState({ background: "#E5E6FF" })}
                                 />
                                 <TouchableOpacity
                                     accessibilityLabel="Change background color to green."
                                     accessibilityHint="Lets you change the background in the chat room to light green."
                                     accessibilityRole="button"
                                     style={styles.circle4}
-                                    onPress={() => this.setState({ background: "#B9C6AE" })}
+                                    onPress={() => this.setState({ background: "#E6FFE5" })}
                                 />
                             </View>
                         </View>
@@ -163,14 +163,14 @@ const styles = StyleSheet.create({
         display: "flex",
     },
     circle1: {
-        backgroundColor: "#090C08",
+        backgroundColor: "silver",
         width: 50,
         height: 50,
         borderRadius: 25,
         margin: 7,
     },
     circle2: {
-        backgroundColor: "#474056",
+        backgroundColor: "#59376b",
         width: 50,
         borderRadius: 25,
         margin: 7,
